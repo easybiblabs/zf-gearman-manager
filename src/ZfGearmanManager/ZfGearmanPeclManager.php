@@ -186,7 +186,7 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
 
         $thisWorker = new \GearmanWorker();
 
-        $thisWorker->addOptions(GEARMAN_WORKER_NON_BLOCKING);
+        //$thisWorker->addOptions(GEARMAN_WORKER_NON_BLOCKING);
 
         $thisWorker->setTimeout(5000);
 
