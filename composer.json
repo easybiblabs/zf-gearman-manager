@@ -28,19 +28,13 @@
         "version": "master",
         "source": {
           "url": "git@github.com:easybiblabs/GearmanManager.git",
-          "type": "git",
-          "reference": "6d2f0df8aecebd0cc926ec14d4ae9a1072207e7c"
-        },
-        "autoload": {
-          "classmap": [
-            "/"
-          ]
+          "type": "git"
         }
       }
     }
   ],
   "require": {
-    "brianlmoon/gearmanmanager": "*",
+    "brianlmoon/gearmanmanager": "dev-jpirkey-composer-support-splitted",
     "php": ">=5.3.3"
   },
   "minimum-stability": "dev"
