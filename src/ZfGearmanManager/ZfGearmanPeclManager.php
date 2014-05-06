@@ -86,7 +86,7 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
         $this->functions = array();
 
         foreach ($workers as $function => $workerFqcn) {
-            $reflection = new ReflectionClass($workerFqcn);
+            $reflection = new \ReflectionClass($workerFqcn);
             $this->add_worker($function, $reflection->getFileName());
         }
     }
