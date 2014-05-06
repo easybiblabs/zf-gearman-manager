@@ -23,7 +23,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:easybiblabs/GearmanManager.git"
+      "url": "https://github.com/easybiblabs/GearmanManager"
     }
   ],
   "require": {
