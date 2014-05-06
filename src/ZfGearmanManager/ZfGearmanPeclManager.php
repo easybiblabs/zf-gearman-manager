@@ -112,7 +112,14 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
 
         foreach($this->servers as $s){
             $this->log("Adding server $s", self::LOG_LEVEL_WORKER_INFO);
-            $thisWorker->addServers($s);
+            // see: https://bugs.php.net/bug.php?id=63041
+            try {
+                $thisWorker->addServers($s);
+            } catch (\GearmanException $e) {
+                if ($e->getMessage() !== 'Failed to set exception option') {
+                    throw $e;
+                }
+            }
         }
 
         foreach($worker_list as $w){
@@ -140,7 +147,6 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
                         sleep(5);
                     }
                 }
-
             }
 
             /**
