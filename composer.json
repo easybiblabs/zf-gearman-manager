@@ -22,15 +22,8 @@
   "name": "easybiblabs/zf-gearman-manager",
   "repositories": [
     {
-      "type": "package",
-      "package": {
-        "name": "brianlmoon/gearmanmanager",
-        "version": "master",
-        "source": {
-          "url": "git@github.com:easybiblabs/GearmanManager.git",
-          "type": "git"
-        }
-      }
+      "type": "vcs",
+      "url": "git@github.com:easybiblabs/GearmanManager.git"
     }
   ],
   "require": {
