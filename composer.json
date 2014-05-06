@@ -1,25 +1,47 @@
 {
-    "name": "easybiblabs/zf-gearman-manager",
-    "description": "ZF2 Gearman Manager",
-
-    "license": "BSD-3-Clause",
-
-    "authors": [{
-        "name": "Tim Fountain",
-        "email": "tim@tfountain.co.uk"
-    }],
-
-    "autoload": {
-        "psr-0": {
-            "ZfGearmanManager": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
-    },
-
-    "require": {
-        "php": ">=5.3.3",
-        "brianlmoon/gearmanmanager": "dev-zf-gearman-manager-fork"
+  "authors": [
+      {
+          "name": "Tim Fountain",
+          "email": "tim@tfountain.co.uk"
+      },
+      {
+          "name": "Florian Holzhauer",
+          "email": "fh-github@fholzhauer.de"
+      }
+  ],
+  "autoload": {
+    "classmap": [
+      "./Module.php"
+    ],
+    "psr-0": {
+      "ZfGearmanManager": "src/"
     }
+  },
+  "description": "ZF2 Gearman Manager",
+  "license": "BSD-3-Clause",
+  "name": "easybiblabs/zf-gearman-manager",
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "brianlmoon/gearmanmanager",
+        "version": "master",
+        "source": {
+          "url": "git@github.com:easybiblabs/GearmanManager.git",
+          "type": "git",
+          "reference": "6d2f0df8aecebd0cc926ec14d4ae9a1072207e7c"
+        },
+        "autoload": {
+          "classmap": [
+            "/"
+          ]
+        }
+      }
+    }
+  ],
+  "require": {
+    "brianlmoon/gearmanmanager": "*",
+    "php": ">=5.3.3"
+  },
+  "minimum-stability": "dev"
 }

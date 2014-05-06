@@ -2,7 +2,7 @@
 
 namespace ZfGearmanManager;
 
-use GearmanManager\Bridge\GearmanPeclManager;
+use GearmanPeclManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfGearmanManager\Worker\WorkerInterface;
@@ -42,39 +42,7 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
      */
     public function start()
     {
-        $this->pid = getmypid();
-
-        // Parse command line options. Loads the config file as well
-        $this->getopt();
-
-        // Register signal listeners
-        $this->register_ticks();
-
-        // Load up the workers
-        $this->load_workers();
-
-        if (empty($this->functions)){
-            $this->log("No workers found");
-            posix_kill($this->pid, SIGUSR1);
-            exit();
-        }
-
-        // Validate workers in the helper process
-        $this->fork_me("validate_workers");
-
-        $this->log("Started with pid $this->pid", self::LOG_LEVEL_PROC_INFO);
-
-        // Start the initial workers and set up a running environment
-        $this->bootstrap();
-
-        $this->process_loop();
-
-        // Kill the helper if it is running
-        if (isset($this->helper_pid)){
-            posix_kill($this->helper_pid, SIGKILL);
-        }
-
-        $this->log("Exiting");
+        parent::__construct();
     }
 
     /**
@@ -118,56 +86,8 @@ class ZfGearmanPeclManager extends GearmanPeclManager implements ServiceLocatorA
         $this->functions = array();
 
         foreach ($workers as $function => $workerFqcn) {
-
-            // TODO include/exclude functionality from GearmanManager
-
-            if (!isset($this->functions[$function])){
-                $this->functions[$function] = array();
-            }
-
-            if (!empty($this->config['functions'][$function]['dedicated_only'])){
-                if(empty($this->config['functions'][$function]['dedicated_count'])){
-                    $this->log("Invalid configuration for dedicated_count for function $function.", self::LOG_LEVEL_PROC_INFO);
-                    exit();
-                }
-
-                $this->functions[$function]['dedicated_only'] = true;
-                $this->functions[$function]["count"] = $this->config['functions'][$function]['dedicated_count'];
-
-            } else {
-
-                $min_count = max($this->do_all_count, 1);
-                if(!empty($this->config['functions'][$function]['count'])){
-                    $min_count = max($this->config['functions'][$function]['count'], $this->do_all_count);
-                }
-
-                if(!empty($this->config['functions'][$function]['dedicated_count'])){
-                    $ded_count = $this->do_all_count + $this->config['functions'][$function]['dedicated_count'];
-                } elseif(!empty($this->config["dedicated_count"])){
-                    $ded_count = $this->do_all_count + $this->config["dedicated_count"];
-                } else {
-                    $ded_count = $min_count;
-                }
-
-                $this->functions[$function]["count"] = max($min_count, $ded_count);
-
-            }
-
-            /**
-             * Note about priority. This exploits an undocumented feature
-             * of the gearman daemon. This will only work as long as the
-             * current behavior of the daemon remains the same. It is not
-             * a defined part fo the protocol.
-             */
-            if(!empty($this->config['functions'][$function]['priority'])){
-                $priority = max(min(
-                    $this->config['functions'][$function]['priority'],
-                    self::MAX_PRIORITY), self::MIN_PRIORITY);
-            } else {
-                $priority = 0;
-            }
-
-            $this->functions[$function]['priority'] = $priority;
+            $reflection = new ReflectionClass($workerFqcn);
+            $this->add_worker($function, $reflection->getFileName());
         }
     }
 
