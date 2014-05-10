@@ -7,33 +7,36 @@ This is a Zend Framework 2 module that provides some basic integration between a
 
 ## Installation
 
-The module should be installed via. Composer. In addition to adding this module as a dependency you need to add the repository for my forked version of Gearman Manager:
+The module should be installed via. Composer. In addition to adding this module (`zf-gearman-manager`) and it's repository as a dependency, you need to add the repository for my forked version of Gearman Manager (which `zf-gearman-manager` requires). So your composer.json should look something like:
 
     "repositories": [{
         "type": "vcs",
         "url": "https://github.com/tfountain/GearmanManager"
+    },{
+        "type": "vcs",
+        "url": "git@github.com:tfountain/zf-gearman-manager"
     }],
 
     "require": {
         "tfountain/zf-gearman-manager": "dev-master"
     }
 
-The forked Gearman Manager is a fork of the main repo's "overhaul" branch, and contains one additional function to override how the worker classes are instantiated.
+The forked Gearman Manager is a fork of the main repo's "overhaul" branch, and contains some small changes to worker class instantiation and removal of error supression for worker activity.
 
 ## Usage
 
 Instead of being discovered by scanning folders, with this module workers should be specified via. the app config (usually the `module.config.php`). This done using a `gearman_workers` array, where the config is the worker alias, and the value is the fully qualified name of the worker class:
 
     'gearman_workers' => array(
-        'do-stuff' => 'Application\Worker\DoStuff'
+        'do-stuff' => 'Application\Worker\DoStuff',
     )
 
 Since the workers are loaded by the service manager, you need to add an entry for each one to your service config, either as an invokable in `module.config.php`:
 
     'service_manager' => array(
         'invokables' => array(
-            'Application\Worker\DoStuff' => 'Application\Worker\DoStuff'
-        )
+            'Application\Worker\DoStuff' => 'Application\Worker\DoStuff',
+        ),
     )
 
 or as a factory in `Module.php`:
@@ -44,8 +47,8 @@ or as a factory in `Module.php`:
             'factories' => array(
                 'Application\Worker\DoStuff' => function ($sm) {
                     // setup and return worker class here
-                }
-            )
+                },
+            ),
         );
     }
 
@@ -77,8 +80,8 @@ Host and port for Gearman Client can be configured through the app config (usual
 This is done using a `gearman_client` array
 
     'gearman_client' => array(
-        'host' => 'gearmand.local'
-        'port' => 31337
+        'host' => 'gearmand.local',
+        'port' => 31337,
     )
 
 ## Running the daemon
